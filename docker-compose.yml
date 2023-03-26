@@ -1,0 +1,23 @@
+version: '3.9'
+
+services:
+  redis: 
+    container_name: redis-container
+    image: redis
+    ports:
+      - '6379:6379' 
+  redisinsight:
+    container_name: redis-gui
+    image: redislabs/redisinsight:latest
+    ports:
+      - '8001:8001'
+  api:
+    container_name: device-api
+    build: .
+    entrypoint: python src/app.py
+    env_file:
+      - .env
+    ports:
+      - '5000:5000'
+    depends_on:
+        - redis
